@@ -1,218 +1,187 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[codz]
-*$py.class
+import tkinter as tk
+import os
+import importlib.util
 
-# C extensions
-*.so
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+class BIOS:
 
-# PyInstaller
-#   Usually these files are written by a python script from a template
-#   before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+    def __init__(self, root):
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+        self.root = root
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py.cover
-.hypothesis/
-.pytest_cache/
-cover/
+        self.root.geometry("800x480")
+        self.root.configure(bg="black")
 
-# Translations
-*.mo
-*.pot
+        self.text = tk.Text(
+            root,
+            bg="black",
+            fg="white",
+            borderwidth=0,
+            font=("Courier", 10)
+        )
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+        self.text.pack(fill="both", expand=True)
 
-# Flask stuff:
-instance/
-.webassets-cache
+        self.system_file = None
 
-# Scrapy stuff:
-.scrapy
+        self.log("processor test: pentium 3 MHZ")
 
-# Sphinx documentation
-docs/_build/
+        self.root.after(800, self.step2)
 
-# PyBuilder
-.pybuilder/
-target/
+    def log(self, msg):
 
-# Jupyter Notebook
-.ipynb_checkpoints
+        self.text.insert("end", msg + "\n")
+        self.text.see("end")
 
-# IPython
-profile_default/
-ipython_config.py
+    def step2(self):
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+        self.log("Memory Test: 32768K OK")
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-# Pipfile.lock
+        self.root.after(800, self.step3)
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-# uv.lock
+    def step3(self):
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-# poetry.lock
-# poetry.toml
+        self.log("Detecting Storage....... OK")
 
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
-# pdm.lock
-# pdm.toml
-.pdm-python
-.pdm-build/
+        self.root.after(800, self.step4)
 
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-# pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
+    def step4(self):
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+        self.log("Searching Systems.......")
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
+        self.root.after(800, self.search_system)
 
-# Redis
-*.rdb
-*.aof
-*.pid
+    def search_system(self):
 
-# RabbitMQ
-mnesia/
-rabbitmq/
-rabbitmq-data/
+        sistemas = "/storage/emulated/0/Sistemas"
 
-# ActiveMQ
-activemq-data/
+        if not os.path.exists(sistemas):
 
-# SageMath parsed files
-*.sage.py
+            self.log("Invalid Boot")
+            self.log(sistemas)
 
-# Environments
-.env
-.envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+            return
 
-# Spyder project settings
-.spyderproject
-.spyproject
+        for pasta in os.listdir(sistemas):
 
-# Rope project settings
-.ropeproject
+            caminho = os.path.join(
+                sistemas,
+                pasta
+            )
 
-# mkdocs documentation
-/site
+            if not os.path.isdir(caminho):
+                continue
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+            boot = os.path.join(
+                caminho,
+                "boot.py"
+            )
 
-# Pyre type checker
-.pyre/
+            explorer = os.path.join(
+                caminho,
+                "explorer.py"
+            )
 
-# pytype static type analyzer
-.pytype/
+            if os.path.exists(boot):
 
-# Cython debug symbols
-cython_debug/
+                self.system_file = boot
 
-# PyCharm
-#   JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#   be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#   and can be added to the global gitignore or merged into this file.  For a more nuclear
-#   option (not recommended) you can uncomment the following to ignore the entire idea folder.
-# .idea/
+                self.log(f"Found: {pasta}")
+                self.log("starting windows....")
 
-# Abstra
-#   Abstra is an AI-powered process automation framework.
-#   Ignore directories containing user credentials, local state, and settings.
-#   Learn more at https://abstra.io/docs
-.abstra/
+                self.root.after(
+                    1500,
+                    self.boot
+                )
 
-# Visual Studio Code
-#   Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
-#   that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#   and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#   you could uncomment the following to ignore the entire vscode folder
-# .vscode/
-# Temporary file for partial code execution
-tempCodeRunnerFile.py
+                return
 
-# Ruff stuff:
-.ruff_cache/
+            if os.path.exists(explorer):
 
-# PyPI configuration file
-.pypirc
+                self.system_file = explorer
 
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+                self.log(f"Found: {pasta}")
+                self.log("starting windows....")
 
-# Streamlit
-.streamlit/secrets.toml
+                self.root.after(
+                    1500,
+                    self.boot
+                )
+
+                return
+
+        self.log("No Found a System Or Corruped system")
+
+    def boot(self):
+
+        try:
+
+            spec = importlib.util.spec_from_file_location(
+                "system",
+                self.system_file
+            )
+
+            mod = importlib.util.module_from_spec(spec)
+
+            spec.loader.exec_module(mod)
+
+            for widget in self.root.winfo_children():
+                widget.destroy()
+
+            if hasattr(mod, "iniciar"):
+
+                mod.iniciar(self.root)
+
+            else:
+
+                erro = tk.Text(
+                    self.root,
+                    bg="black",
+                    fg="white",
+                    borderwidth=0,
+                    font=("Courier", 10)
+                )
+
+                erro.pack(fill="both", expand=True)
+
+                erro.insert(
+                    "end",
+                    "BOOT ERROR\n\n"
+                )
+
+                erro.insert(
+                    "end",
+                    "Sistema sem iniciar()"
+                )
+
+        except Exception as e:
+
+            for widget in self.root.winfo_children():
+                widget.destroy()
+
+            erro = tk.Text(
+                self.root,
+                bg="black",
+                fg="white",
+                borderwidth=0,
+                font=("Courier", 10)
+            )
+
+            erro.pack(fill="both", expand=True)
+
+            erro.insert(
+                "end",
+                "BOOT ERROR\n\n"
+            )
+
+            erro.insert(
+                "end",
+                str(e)
+            )
+
+
+root = tk.Tk()
+
+BIOS(root)
+
+root.mainloop()
